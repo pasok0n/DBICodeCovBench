@@ -1,0 +1,10 @@
+--- /pjsip/src/pjsua-lib/pjsua_core.c	2025-05-20 15:27:21.906779521 +0200
++++ /pjsip/src/pjsua-lib/pjsua_core_copy.c	2025-05-20 15:28:25.296631196 +0200
+@@ -931,6 +931,7 @@
+     seed = pj_hash_calc(seed, &pid, sizeof(pid));
+ 
+     /* Init random seed */
++    seed=0;
+     pj_srand(seed);
+ }
+ 
