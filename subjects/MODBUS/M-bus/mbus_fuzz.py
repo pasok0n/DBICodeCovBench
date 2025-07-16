@@ -17,7 +17,9 @@ def main():
         target=Target(
             connection=TCPSocketConnection(target_ip, target_port)
         ),
-        sleep_time=0.1
+        sleep_time=0.1,  # Adjust sleep time between test cases
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
 
     # ----- Read Coils (0x01) -----

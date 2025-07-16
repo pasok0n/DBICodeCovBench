@@ -19,7 +19,7 @@ RUN apt-get -y update && \
     gdb \
     strace \
     wget \
-    libcap-dev
+    libcap-dev cmake g++ g++-multilib doxygen git zlib1g-dev libunwind-dev libsnappy-dev liblz4-dev libxxhash-dev bsdmainutils
 
 # Add a new user ubuntu, pass: ubuntu
 RUN getent group ubuntu || groupadd ubuntu && \
@@ -44,22 +44,31 @@ ENV PIN="/home/ubuntu/pin/"
 RUN wget https://github.com/DynamoRIO/dynamorio/releases/download/release_11.3.0-1/DynamoRIO-Linux-11.3.0.tar.gz && \
     tar -xzf DynamoRIO-Linux-11.3.0.tar.gz && \
     rm DynamoRIO-Linux-11.3.0.tar.gz && \
-    mv DynamoRIO-Linux-* dynamorio
+    mv DynamoRIO-Linux-* dynamorio 
+
+RUN mkdir coverage_instrumentation && \
+    cd coverage_instrumentation
+COPY --chown=ubuntu:ubuntu CMakeLists.txt /home/ubuntu/coverage_instrumentation/CMakeLists.txt
+COPY --chown=ubuntu:ubuntu coverage_client.c /home/ubuntu/coverage_instrumentation/coverage_client.c
+RUN cd coverage_instrumentation && mkdir build && cd build && \
+    cmake -DDynamoRIO_DIR=${DYNAMORIO}/cmake .. && \
+    make
+
 
 #Pin 
-RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    tar -xzf pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    rm pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    mv pin-external-3.31-98869-gfa6f126a8-gcc-linux pin
+# RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     tar -xzf pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     rm pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     mv pin-external-3.31-98869-gfa6f126a8-gcc-linux pin
 
-#Frida
+# #Frida
 RUN python3 -m venv /home/ubuntu/venv
 ENV PATH="/home/ubuntu/venv/bin:$PATH"
-COPY --chown=ubuntu:ubuntu tools/frida.patch ${WORKDIR}/frida.patch
-RUN pip install --upgrade pip && pip install frida-tools==13.7.1 && \
-    cd $WORKDIR && \
-    wget https://raw.githubusercontent.com/gaasedelen/lighthouse/refs/heads/master/coverage/frida/frida-drcov.py && \
-    patch -p1 frida-drcov.py < frida.patch
+# COPY --chown=ubuntu:ubuntu tools/frida.patch ${WORKDIR}/frida.patch
+# RUN pip install --upgrade pip && pip install frida-tools==13.7.1 && \
+#     cd $WORKDIR && \
+#     wget https://raw.githubusercontent.com/gaasedelen/lighthouse/refs/heads/master/coverage/frida/frida-drcov.py && \
+#     patch -p1 frida-drcov.py < frida.patch
 
 #Boofuzz
 RUN pip install boofuzz
@@ -69,19 +78,19 @@ COPY --chown=ubuntu:ubuntu run.sh ${WORKDIR}/run.sh
 COPY --chown=ubuntu:ubuntu tools/drcov_inject.sh ${WORKDIR}/drcov_inject.sh
 COPY --chown=ubuntu:ubuntu tools/drcov_spawn.sh ${WORKDIR}/drcov_spawn.sh
 COPY --chown=ubuntu:ubuntu tools/run_pin.sh ${WORKDIR}/run_pin.sh
-COPY --chown=ubuntu:ubuntu tools/pin_cov.cpp ${PIN}/source/tools/MyPinTool/pin_cov.cpp
+# COPY --chown=ubuntu:ubuntu tools/pin_cov.cpp ${PIN}/source/tools/MyPinTool/pin_cov.cpp
 COPY --chown=ubuntu:ubuntu dicom_fuzz.py ${WORKDIR}/dicom_fuzz.py
 COPY --chown=ubuntu:ubuntu tools/frida-spawn.py ${WORKDIR}/frida-spawn.py
 
 # Compiling Pin Coverage
-RUN cd $PIN/source/tools/MyPinTool && \
-    mkdir obj-intel64 && \
-    make obj-intel64/pin_cov.so
+# RUN cd $PIN/source/tools/MyPinTool && \
+#     mkdir obj-intel64 && \
+#     make obj-intel64/pin_cov.so
 
 
 USER root
 
-# Download and compile Dcmtk
+Download and compile Dcmtk
 RUN cd $WORKDIR && \
     git clone https://github.com/DCMTK/dcmtk && \
     cd dcmtk && \

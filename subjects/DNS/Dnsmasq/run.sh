@@ -22,12 +22,33 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/dnsmasq/src/dnsmasq &
       PID=$(pgrep -f dnsmasq)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      sleep 1
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      sleep 1
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       pkill -f dnsmasq
-      sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/dnsmasq/src/dnsmasq &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      sleep 1
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      sleep 1
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
 

@@ -22,12 +22,40 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/m-bus/bin/mb_tcp_slave &
       PID=$(pgrep -f mb_tcp_slave)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
       timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      sleep 0.1
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      sleep 0.1
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       pkill -f mb_tcp_slave
       sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/m-bus/bin/mb_tcp_slave &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
       timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      sleep 0.1
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      sleep 0.1
+      printf 'F' > /tmp/dr_cov_cmd
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python mbus_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
 

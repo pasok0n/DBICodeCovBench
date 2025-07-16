@@ -12,9 +12,9 @@ shift 2
 APPNAME=$(basename "$TARGET_BINARY")
 
 DRRUN=${DYNAMORIO}"/bin64/drrun"
-CLIENT=${DYNAMORIO}"/tools/lib64/release/libdrcov.so"
+CLIENT="/home/ubuntu/coverage_instrumentation/build/libcoverage_client.so"
 
-CMD="$DRRUN -c $CLIENT -logdir ${WORKDIR}/$OUTDIR/ -dump_text -- $TARGET_BINARY $*"
+CMD="$DRRUN -c $CLIENT -target_module bftpd -target_function main -- $TARGET_BINARY $*"
 
 echo "Executing: $CMD"
 $CMD

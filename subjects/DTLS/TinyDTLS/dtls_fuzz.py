@@ -22,6 +22,8 @@ def main():
             connection=UDPSocketConnection(target_ip, target_port)
         ),
         sleep_time=0.5,  # DTLS servers may need time to recover between tests
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
     
     # DTLS Record Layer constants

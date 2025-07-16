@@ -13,9 +13,9 @@ if [ -z "$APPNAME" ]; then
 fi
 
 DRRUN=${DYNAMORIO}"/bin64/drrun"
-CLIENT=${DYNAMORIO}"/tools/lib64/release/libdrcov.so"
+CLIENT="/home/ubuntu/coverage_instrumentation/build/libcoverage_client.so"
 
-CMD="$DRRUN -attach $PID -c $CLIENT -dump_text -logdir ${WORKDIR}/$OUTDIR/"
+CMD="$DRRUN -attach $PID -c $CLIENT -target_module webfsd -target_function main"
 echo "Executing: $CMD"
 $CMD
 RET=$?

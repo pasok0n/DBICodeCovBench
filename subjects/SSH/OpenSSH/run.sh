@@ -28,13 +28,30 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/openssh/sshd -d -e -p 22 -f ${WORKDIR}/openssh/sshd_config &
       PID=$(pgrep -f sshd)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       pkill -f sshd
       sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $(($TIMEOUT + 5)) ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/openssh/sshd -d -e -p 22 -f ${WORKDIR}/openssh/sshd_config &
-      sleep 5 
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       sleep 5 
     fi
   fi

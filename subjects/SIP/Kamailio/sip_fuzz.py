@@ -58,6 +58,8 @@ def main():
             connection=UDPSocketConnection(target_ip, target_port)
         ),
         sleep_time=0.5,  # Longer sleep between tests for SIP servers
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
     cleanup_server()
     # Define a SIP REGISTER request

@@ -90,6 +90,8 @@ def main():
         ),
         sleep_time=0.5,
         restart_interval=50,  # Restart target every 50 test cases
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
     
     # SSH identification string fuzzing

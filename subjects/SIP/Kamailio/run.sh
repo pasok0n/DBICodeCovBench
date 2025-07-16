@@ -23,12 +23,30 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/kamailio/src/kamailio -f ${WORKDIR}/kamailio-basic.cfg -L ${WORKDIR}/kamailio/src/modules -Y ${WORKDIR}/kamailio/runtime_dir -n 1 -D -E &
       PID=$(pgrep -f kamailio)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       pkill -f kamailio
       sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/kamailio/src/kamailio -f ${WORKDIR}/kamailio-basic.cfg -L ${WORKDIR}/kamailio/src/modules -Y ${WORKDIR}/kamailio/runtime_dir -n 1 -D -E &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
 

@@ -18,7 +18,9 @@ def main():
         target=Target(
             connection=UDPSocketConnection(target_ip, target_port)
         ),
-        sleep_time=0.1
+        sleep_time=0.1,
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
     
     # Define DNS header format

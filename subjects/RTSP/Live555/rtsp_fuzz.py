@@ -18,7 +18,9 @@ def main():
         target=Target(
             connection=TCPSocketConnection(target_ip, target_port)
         ),
-        sleep_time=0.5,  # Give RTSP server time to process each request
+        sleep_time=0.5,  # Give RTSP server time to process each request,
+        index_start=0,   # Start at the first test case
+        index_end=1      # Stop after the first test case
     )
     
     # Define the stream URL to test

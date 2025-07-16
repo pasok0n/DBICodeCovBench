@@ -22,13 +22,30 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/pure-ftpd/src/pure-ftpd -A &
       PID=$(pgrep -f pure-ftpd)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       pkill -f pure-ftpd
       sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $(($TIMEOUT + 5)) ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/pure-ftpd/src/pure-ftpd -A &
       sleep 5
+      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'D' > /tmp/dr_cov_cmd
+      printf 'F' > /tmp/dr_cov_cmd
+      timeout -k 0 --preserve-status $TIMEOUT python ftp_fuzz.py
+      printf 'Q' > /tmp/dr_cov_cmd
       sleep 5 
     fi
   fi

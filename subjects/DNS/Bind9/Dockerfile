@@ -46,20 +46,28 @@ RUN wget https://github.com/DynamoRIO/dynamorio/releases/download/release_11.3.0
     rm DynamoRIO-Linux-11.3.0.tar.gz && \
     mv DynamoRIO-Linux-* dynamorio
 
+RUN mkdir coverage_instrumentation && \
+    cd coverage_instrumentation
+COPY --chown=ubuntu:ubuntu CMakeLists.txt /home/ubuntu/coverage_instrumentation/CMakeLists.txt
+COPY --chown=ubuntu:ubuntu coverage_client.c /home/ubuntu/coverage_instrumentation/coverage_client.c
+RUN cd coverage_instrumentation && mkdir build && cd build && \
+    cmake -DDynamoRIO_DIR=${DYNAMORIO}/cmake .. && \
+    make
+
 #Pin 
-RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    tar -xzf pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    rm pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
-    mv pin-external-3.31-98869-gfa6f126a8-gcc-linux pin
+# RUN wget https://software.intel.com/sites/landingpage/pintool/downloads/pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     tar -xzf pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     rm pin-external-3.31-98869-gfa6f126a8-gcc-linux.tar.gz && \
+#     mv pin-external-3.31-98869-gfa6f126a8-gcc-linux pin
 
 #Frida
 RUN python3 -m venv /home/ubuntu/venv
 ENV PATH="/home/ubuntu/venv/bin:$PATH"
-COPY --chown=ubuntu:ubuntu tools/frida.patch ${WORKDIR}/frida.patch
-RUN pip install --upgrade pip && pip install frida-tools==13.7.1 && \
-    cd $WORKDIR && \
-    wget https://raw.githubusercontent.com/gaasedelen/lighthouse/refs/heads/master/coverage/frida/frida-drcov.py && \
-    patch -p1 frida-drcov.py < frida.patch
+# COPY --chown=ubuntu:ubuntu tools/frida.patch ${WORKDIR}/frida.patch
+# RUN pip install --upgrade pip && pip install frida-tools==13.7.1 && \
+#     cd $WORKDIR && \
+#     wget https://raw.githubusercontent.com/gaasedelen/lighthouse/refs/heads/master/coverage/frida/frida-drcov.py && \
+#     patch -p1 frida-drcov.py < frida.patch
 
 #Boofuzz
 RUN pip install boofuzz
@@ -74,9 +82,9 @@ COPY --chown=ubuntu:ubuntu dns_fuzz.py ${WORKDIR}/dns_fuzz.py
 COPY --chown=ubuntu:ubuntu tools/frida-spawn.py ${WORKDIR}/frida-spawn.py
 
 # Compiling Pin Coverage
-RUN cd $PIN/source/tools/MyPinTool && \
-    mkdir obj-intel64 && \
-    make obj-intel64/pin_cov.so
+# RUN cd $PIN/source/tools/MyPinTool && \
+#     mkdir obj-intel64 && \
+#     make obj-intel64/pin_cov.so
 
 
 USER root
