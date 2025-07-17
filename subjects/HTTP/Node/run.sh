@@ -22,30 +22,14 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       npx http-server &
       PID=$(pgrep -f http-server)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
       sleep 5
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
-      pkill -f http-server
-      sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} npx http-server &
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
       sleep 5
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
 

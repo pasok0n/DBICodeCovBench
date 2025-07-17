@@ -22,35 +22,14 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/bind/build/sbin/named &
       PID=$(pgrep -f named)
       ./drcov_inject.sh ${OUTDIR} $PID &
-      sleep 3
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
       sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
-      pkill -f named
-      sleep 10
+      sleep 5
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/bind/build/sbin/named &
       sleep 1
-      printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dns_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
-      printf 'Q' > /tmp/dr_cov_cmd
+      sleep 5
     fi
   fi
 

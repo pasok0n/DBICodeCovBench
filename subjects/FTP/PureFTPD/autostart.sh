@@ -12,11 +12,11 @@ TOOLNAME=$1
 docker build . -t "$TOOLNAME"
 
 # Run bb_docker.sh with spawn and attach commands
-./../../../scripts/bb_docker.sh "$TOOLNAME" 4 results99 dynamorio spawn spawn 5
-./../../../scripts/bb_docker.sh "$TOOLNAME" 4 results99 dynamorio attach attach 5
+./../../../scripts/bb_docker.sh "$TOOLNAME" 4 results-pureftpd dynamorio spawn spawn 5
+./../../../scripts/bb_docker.sh "$TOOLNAME" 4 results-pureftpd dynamorio attach attach 5
 
-# Navigate to results99 directory
-cd results99 || { echo "Directory results99 not found"; exit 1; }
+# Navigate to results-pureftpd directory
+cd results-pureftpd || { echo "Directory results-pureftpd not found"; exit 1; }
 
 # Create hexdump output file
 HEXDUMP_FILE="hexdump_output.txt"

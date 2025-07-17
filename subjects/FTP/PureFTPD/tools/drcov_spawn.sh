@@ -14,7 +14,7 @@ APPNAME=$(basename "$TARGET_BINARY")
 DRRUN=${DYNAMORIO}"/bin64/drrun"
 CLIENT="/home/ubuntu/coverage_instrumentation/build/libcoverage_client.so"
 
-CMD="$DRRUN -c $CLIENT -target_module pure-ftpd -target_function main -- $TARGET_BINARY $*"
+CMD="$DRRUN -c $CLIENT -- $TARGET_BINARY $*"
 
 echo "Executing: $CMD"
 $CMD

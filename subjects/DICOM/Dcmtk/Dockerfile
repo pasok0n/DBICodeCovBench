@@ -90,7 +90,7 @@ COPY --chown=ubuntu:ubuntu tools/frida-spawn.py ${WORKDIR}/frida-spawn.py
 
 USER root
 
-Download and compile Dcmtk
+# Download and compile Dcmtk
 RUN cd $WORKDIR && \
     git clone https://github.com/DCMTK/dcmtk && \
     cd dcmtk && \

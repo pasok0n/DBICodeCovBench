@@ -22,30 +22,14 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/simple-http-server -i -t 1 -p 8080 http_folder &
       PID=$(pgrep -f simple-http-server)
       ./drcov_inject.sh ${OUTDIR} $PID &
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
       sleep 5
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
-      pkill -f simple-http-server
-      sleep 10
     elif $(strstr $OPTIONS "spawn"); then
       timeout -k 0 --preserve-status $TIMEOUT ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/simple-http-server -i -t 1 -p 8080 http_folder &
+      sleep 1
+      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
       sleep 5
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python http_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
 

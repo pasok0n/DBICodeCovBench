@@ -22,38 +22,15 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       ${WORKDIR}/dcmtk/build/bin/dcmqrscp --single-process &
       PID=$(pgrep -f dcmqrscp)
       ./drcov_inject.sh ${OUTDIR} $PID &
-      #sleep 5
-      #printf 'S' > /tmp/dr_cov_cmd
+      sleep 0.5
+      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py 
       sleep 5
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
     elif $(strstr $OPTIONS "spawn"); then
       ./drcov_spawn.sh ${OUTDIR} ${WORKDIR}/dcmtk/build/bin/dcmqrscp --single-process &
+      sleep 0.5
+      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py 
       sleep 5
-      #printf 'S' > /tmp/dr_cov_cmd
-      #sleep 1
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      sleep 1
-      printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python dicom_fuzz.py
-      printf 'Q' > /tmp/dr_cov_cmd
-      #printf 'D' > /tmp/dr_cov_cmd
-      printf 'Q' > /tmp/dr_cov_cmd
+
     fi
   fi
 

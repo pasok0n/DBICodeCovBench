@@ -15,7 +15,7 @@ fi
 DRRUN=${DYNAMORIO}"/bin64/drrun"
 CLIENT="/home/ubuntu/coverage_instrumentation/build/libcoverage_client.so"
 
-CMD="$DRRUN -attach $PID -c $CLIENT -target_module fftp -target_function main"
+CMD="$DRRUN -attach $PID -c $CLIENT"
 echo "Executing: $CMD"
 $CMD
 RET=$?

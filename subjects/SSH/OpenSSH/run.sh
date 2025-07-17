@@ -35,8 +35,6 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
       printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
       printf 'Q' > /tmp/dr_cov_cmd
       pkill -f sshd
       sleep 10
@@ -49,8 +47,6 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       printf 'F' > /tmp/dr_cov_cmd
       timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
       printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python ssh_fuzz.py
       printf 'Q' > /tmp/dr_cov_cmd
       sleep 5 
     fi
