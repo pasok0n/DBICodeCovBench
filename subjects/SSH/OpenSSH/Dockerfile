@@ -77,6 +77,7 @@ COPY --chown=ubuntu:ubuntu tools/drcov_spawn.sh ${WORKDIR}/drcov_spawn.sh
 COPY --chown=ubuntu:ubuntu tools/run_pin.sh ${WORKDIR}/run_pin.sh
 COPY --chown=ubuntu:ubuntu tools/pin_cov.cpp ${PIN}/source/tools/MyPinTool/pin_cov.cpp
 COPY --chown=ubuntu:ubuntu ssh_fuzz.py ${WORKDIR}/ssh_fuzz.py
+COPY --chown=ubuntu:ubuntu ssh_fuzz_2.py ${WORKDIR}/ssh_fuzz_2.py
 COPY --chown=ubuntu:ubuntu tools/frida-spawn.py ${WORKDIR}/frida-spawn.py
 
 # Compiling Pin Coverage

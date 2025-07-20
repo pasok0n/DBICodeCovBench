@@ -77,7 +77,7 @@ static inline uint32_t
 calculate_edge_id(uint32_t prev_offset, app_pc curr_pc)
 {
     uint32_t curr_offset = (uint32_t)((uintptr_t)curr_pc) & (MAP_SIZE - 1);
-    uint32_t edge_id = prev_offset ^ curr_offset;
+    uint32_t edge_id = (prev_offset >> 1) ^ curr_offset;
     return edge_id & (MAP_SIZE - 1);
 }
 
@@ -134,8 +134,8 @@ record_edge(app_pc pc)
     uint32_t edge_id = calculate_edge_id(prev_offset, pc);
     mark_edge_afl(&cov, edge_id);
     
-    /* Store new offset for next edge calculation (shifted right by 1) */
-    t->prev_offset = (curr_offset >> 1) & (MAP_SIZE - 1);
+    /* Store new offset for next edge calculation */
+    t->prev_offset = curr_offset;
 }
 
 /* Zero the global coverage bitmap */

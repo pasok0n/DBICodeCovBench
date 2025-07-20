@@ -28,10 +28,8 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
       printf 'D' > /tmp/dr_cov_cmd
       printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz_2.py
       printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
       printf 'Q' > /tmp/dr_cov_cmd
       pkill -f kamailio
       sleep 10
@@ -42,10 +40,8 @@ if $(strstr $DBI "dynamorio") || $(strstr $DBI "pin") || $(strstr $DBI "frida");
       timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
       printf 'D' > /tmp/dr_cov_cmd
       printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
+      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz_2.py
       printf 'D' > /tmp/dr_cov_cmd
-      printf 'F' > /tmp/dr_cov_cmd
-      timeout -k 0 --preserve-status $TIMEOUT python sip_fuzz.py
       printf 'Q' > /tmp/dr_cov_cmd
     fi
   fi
